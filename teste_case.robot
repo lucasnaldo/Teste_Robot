@@ -12,8 +12,8 @@ Variables           clash.py
 *** Variables ***
 ${URL}          https://developer.clashroyale.com/#/login
 ${BROWSER}      chrome
-${email}        lucasnaldo@gmail.com
-${password}     123lu123
+${email}        <<email>>  ## Colocar e-mail cadastrado
+${password}     <<password>>  ## Colocar senha cadastrada
 ${key}          teste
 ${description}     testeDescription
 ${tokenstr}
@@ -84,4 +84,4 @@ New Key
     # Executa funçao da API do clash royale
     ${xxx}=  evaluate  clash.get_clan()  modules=clash
     Log To Console      arquivo .robot finalizado com sucesso!
-    # Close Browser
+    Close Browser
