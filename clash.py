@@ -11,18 +11,14 @@ from robot.api import logger
 
 def get_clan():
     try:
-        # dir_path = os.path.dirname(os.path.realpath(__file__))
-        dir_path = os.getcwd()
-        filename = 'clash_process.log'
-        filenamepath = (dir_path + '\\' + filename)
-        # logging.basicConfig(level=logging.DEBUG)
-        logging.basicConfig(filename=filenamepath,
+        filename = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'clash_process.log')
+        logging.basicConfig(filename=filename,
                             filemode='w',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
                             level=logging.DEBUG)
         token = BuiltIn().get_variable_value("${tokenstr}")
-        logger.console(filenamepath)
+        logger.console(filename)
         logger.console("Iniciando o processo de request da API")
         logging.info("Acessando os clans com nome 'The resistance'")
         

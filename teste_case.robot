@@ -12,8 +12,8 @@ Variables           clash.py
 *** Variables ***
 ${URL}          https://developer.clashroyale.com/#/login
 ${BROWSER}      chrome
-${email}        <<email>>  ## Colocar e-mail cadastrado
-${password}     <<password>>  ## Colocar senha cadastrada
+${email}        lucasnaldo@gmail.com  ## Colocar e-mail cadastrado
+${password}     123lu123  ## Colocar senha cadastrada
 ${key}          teste
 ${description}     testeDescription
 ${tokenstr}
