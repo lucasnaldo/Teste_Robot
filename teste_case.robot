@@ -4,7 +4,10 @@ Library           OperatingSystem
 Library           BuiltIn
 Library           Collections
 Library           Process
+Library           ipfinder.py
 Library           clash.py
+Variables           ipfinder.py
+Variables           clash.py
 
 *** Variables ***
 ${URL}          https://developer.clashroyale.com/#/login
@@ -15,32 +18,25 @@ ${key}          teste
 ${description}     testeDescription
 ${path}         
 ${tokenstr}
-${getc}
-${getm}
-${save}        
-
+${getc}   
 
 
 *** Test Cases ***
-Log in
-    Open Browser    ${URL}    ${BROWSER}
+Test Case
+    Open ClashRoyale by Chrome
     Log in    ${email}    ${password}
     Menu Superior
     New Key
-    Proc
-
 
 *** Keywords ***
 My Keyword
     [Arguments]    ${path}
     Directory Should Exist    ${path}
-    LOG TO CONSOLE            ${path}
     Set Log Level    DEBUG
 
 Open ClashRoyale by Chrome
     # Abre o chromedriver
     Open Browser    ${URL}    ${BROWSER}
-    LOG TO CONSOLE            ${URL}
 
 Log in
     [Arguments]    ${email}    ${password}
@@ -71,7 +67,7 @@ New Key
     Input Text     xpath=//*[@id="name"]     ${key}
     Input Text     xpath=//*[@id="description"]     ${description}
     # Traz ip por chamada python a API
-    ${var}=  evaluate  clash.ip_get()  modules=clash
+    ${var}=  evaluate  ipfinder.ip_get()  modules=ipfinder
     # Cola IP no campo
     Input Text     xpath=//*[@id="range-0"]     ${var}
     # Clica no botão Create Key
@@ -83,8 +79,9 @@ New Key
     # Copia o Token
     ${token}=   Get Text   xpath=//*[@id="content"]/div[1]/div[2]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/form[1]/div[1]/div[1]/samp[1]
     ${tokenstr}=    Convert To String   ${token}
-    Log To Console      ${tokenstr}
-
-Proc
-    ${getc}=   Start Process           python   clash.get_clan(${tokenstr})
-    Log To Console      ${getc}
+    Set Global Variable    ${tokenstr}
+    # Log To Console      ${tokenstr}
+    # Process.Start Process    python   clash.get_clan()    ${tokenstr}
+    ${xxx}=  evaluate  clash.get_clan()  modules=clash
+    Log To Console      arquivo .robot finalizado com sucesso!
+    Close Browser

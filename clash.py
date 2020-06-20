@@ -8,24 +8,17 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api import logger
 
 
-logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(level=logging.DEBUG, filename='clash.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
-
-def ip_get():
-    try:
-        ip = requests.get('https://api.ipify.org').text
-        logger.console(ip)
-        # print(ip)
-        
-        return ip
-    
-    except Exception as ex:
-        logging.error(ex)
-        raise ex
-
-def get_clan(token):
+def get_clan():
     try:  
-        logger.console("ENTROU NO GET CLAN")
+        # logging.basicConfig(level=logging.DEBUG)
+        # logging.basicConfig(level=logging.DEBUG, filename='clash.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
+        logging.basicConfig(filename='clash_process.txt',
+                            filemode='w',
+                            format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                            datefmt='%H:%M:%S',
+                            level=logging.DEBUG)
+        token = BuiltIn().get_variable_value("${tokenstr}")
+        logger.console("Iniciando o processo de request da API")
         logging.info("Acessando os clans com nome 'The resistance'")
         
         # setando parametros de requisição
@@ -35,13 +28,15 @@ def get_clan(token):
         'Authorization': 'Bearer {}'.format(str(token))
         }
         
-        logging.warning("Utilizando o Token fixado no codigo")
+        logging.warning("url com parametro fixado no codigo")
         
         # Efetuando chamada a api passando o nome do clan como referencia
         response = requests.get(url_clans, headers=headers, data = payload)
+        logger.console("\nConvertendo retorno em texto")
         data = response.text.encode('utf8')
         
         # Corvertendo retorno para json
+        logger.console("Convertendo retorno em JSON")
         j_data = json.loads(data)
         items = j_data['items']
         
@@ -66,28 +61,28 @@ def get_clan(token):
                             # Salvando a Tag tratada em variavel
                             tag_corrigida = tag.replace('#', '%23')
                             listinha.append(dictzinho)
-            
-            # Retorna Tag tratada para segunda chamada              
-            print(tag_corrigida)
-            logger.console(tag_corrigida)
 
-        logger.console("ENTROU NO GET MEMBERS")
+        logger.console("Tag do clan desejano encontrada e formatada")
         logging.info('Acessando os membros do clan usando a tag do clan')
         
         # Setando parametros para a chamada de membros do clan, passando a variavel da Tag formatada
         url_clans_members = "https://api.clashroyale.com/v1/clans/{}/members".format(str(tag_corrigida))
         payload = {}
         headers = {
-        'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6Ijg2YWVjZDEyLWU0NTYtNGEwNS05NzNlLTgyZDcwODEyYTYwYiIsImlhdCI6MTU5MjQ1MDcyNCwic3ViIjoiZGV2ZWxvcGVyLzQ1ODU4MmVjLTNhNDgtZDUzNC1kNWZmLTdiYjBkMmI5ZTU2MiIsInNjb3BlcyI6WyJyb3lhbGUiXSwibGltaXRzIjpbeyJ0aWVyIjoiZGV2ZWxvcGVyL3NpbHZlciIsInR5cGUiOiJ0aHJvdHRsaW5nIn0seyJjaWRycyI6WyIxNzcuNDUuMzUuMjUiXSwidHlwZSI6ImNsaWVudCJ9XX0.e5FZ0AzCrW_VYVwI5D1PJCSAR6nJWU8YOdDMaL71TnJU6NkJ-JwILuSB7P5jximgxWv1nIaxi6IMgLU0weDu9w'
+        'Authorization': 'Bearer {}'.format(str(token))
         }
+        logging.warning("Não utilize o Token fixado no codigo!")
         
         # Efetuando a segunda requisição a API
+        logger.console("\nIniciando request dos membros do clan")
         response_clans_members = requests.get(url_clans_members, headers=headers, data = payload)
         
         # Convertendo retorno para texto
+        logger.console("Convertendo retorno em texto")
         data_clans_members = response_clans_members.text.encode('utf8')
         
         # Convertendo retorno para JSON
+        logger.console("Convertendo retorno em JSON")
         j_data_clans_members = json.loads(data_clans_members)
         items_clans_members = j_data_clans_members['items']
         
@@ -106,28 +101,21 @@ def get_clan(token):
             if 'role' in item_member and item_member['role']:
                 member['papel'] = item_member['role']
             
-            member_list.append(member)
+            member_list.append(member)            
             
-            # Retorna lista de informações dos membros do clan
-            print(member_list)
-            logger.console(member_list)
-            
-            return member_list
-            
-        logger.console("ENTROU NO SALVA CSV")
-        logging.info('Gerando arquivo member_list.csv')
-        
         # Convertendo a lista de informações de membros do clan em dataframe
+        logger.console("Transformando lista em dataframe")
         df = pd.DataFrame(member_list)
         
         # Salvando dataframe em formato CSV
+        logging.info('Gerando arquivo member_list.csv')
         df.to_csv('member_list.csv', index=None, encoding='utf-8-sig')
         
         # Retorno 
-        print("Sucesso!")
-        logger.console("Sucesso!")
+        ret = "Processo finalizado com Sucesso!"
+        logger.console(ret)
         
-        return {}
+        return ret
         
     except Exception as ex:
         logging.error(ex)
