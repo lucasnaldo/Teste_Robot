@@ -5,7 +5,8 @@ import csv
 import pandas as pd
 import logging
 from robot.libraries.BuiltIn import BuiltIn
-    
+
+
 logging.basicConfig(level=logging.DEBUG)
 logging.basicConfig(level=logging.DEBUG, filename='clash.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
 
@@ -33,6 +34,8 @@ try:
                         tag = item['tag']
                         tag_corrigida = tag.replace('#', '%23')
                         listinha.append(dictzinho)
+                        
+    
         
 except Exception as ex:
     logging.error(ex)
