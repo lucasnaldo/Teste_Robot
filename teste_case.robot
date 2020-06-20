@@ -12,26 +12,27 @@ Variables           clash.py
 *** Variables ***
 ${URL}          https://developer.clashroyale.com/#/login
 ${BROWSER}      chrome
-${email}        <<email>>
-${password}     <<password>>
+${email}        lucasnaldo@gmail.com
+${password}     123lu123
 ${key}          teste
 ${description}     testeDescription
-${path}         
 ${tokenstr}
 ${getc}   
 
 
 *** Test Cases ***
 Test Case
+    Log level
     Open ClashRoyale by Chrome
     Log in    ${email}    ${password}
     Menu Superior
     New Key
 
 *** Keywords ***
-My Keyword
-    [Arguments]    ${path}
-    Directory Should Exist    ${path}
+Retry
+    Run Keyword N Times And Stop If Success    5    Login    @{args}
+
+Log level
     Set Log Level    DEBUG
 
 Open ClashRoyale by Chrome
@@ -80,8 +81,7 @@ New Key
     ${token}=   Get Text   xpath=//*[@id="content"]/div[1]/div[2]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/form[1]/div[1]/div[1]/samp[1]
     ${tokenstr}=    Convert To String   ${token}
     Set Global Variable    ${tokenstr}
-    # Log To Console      ${tokenstr}
-    # Process.Start Process    python   clash.get_clan()    ${tokenstr}
+    # Executa funçao da API do clash royale
     ${xxx}=  evaluate  clash.get_clan()  modules=clash
     Log To Console      arquivo .robot finalizado com sucesso!
-    Close Browser
+    # Close Browser

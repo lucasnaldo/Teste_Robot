@@ -1,6 +1,7 @@
 import requests
 import json
 import re
+import os
 import csv
 import pandas as pd
 import logging
@@ -9,15 +10,19 @@ from robot.api import logger
 
 
 def get_clan():
-    try:  
+    try:
+        # dir_path = os.path.dirname(os.path.realpath(__file__))
+        dir_path = os.getcwd()
+        filename = 'clash_process.log'
+        filenamepath = (dir_path + '\\' + filename)
         # logging.basicConfig(level=logging.DEBUG)
-        # logging.basicConfig(level=logging.DEBUG, filename='clash.log', filemode='w', format='%(name)s - %(levelname)s - %(message)s')
-        logging.basicConfig(filename='clash_process.txt',
+        logging.basicConfig(filename=filenamepath,
                             filemode='w',
                             format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
                             datefmt='%H:%M:%S',
                             level=logging.DEBUG)
         token = BuiltIn().get_variable_value("${tokenstr}")
+        logger.console(filenamepath)
         logger.console("Iniciando o processo de request da API")
         logging.info("Acessando os clans com nome 'The resistance'")
         
