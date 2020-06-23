@@ -55,7 +55,7 @@ Log in
 
 Menu Superior
     # Clica no Menu superior direito
-    Click Element         xpath=//*[@id="content"]/div[1]/div[2]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/button[1]/span[1]
+    Click Element         xpath=//div[contains(@class,'btn-group')]
     # Clica no item My Account
     Click Element         xpath=//*[@id="content"]/div[1]/div[2]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/ul[1]/li[1]/a[1]
     Wait Until Page Contains    Create New Key
@@ -81,7 +81,7 @@ New Key
     ${token}=   Get Text   xpath=//*[@id="content"]/div[1]/div[2]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/form[1]/div[1]/div[1]/samp[1]
     ${tokenstr}=    Convert To String   ${token}
     Set Global Variable    ${tokenstr}
-    # Executa funçao da API do clash royale
+    Executa funçao da API do clash royale
     ${xxx}=  evaluate  clash.get_clan()  modules=clash
     Log To Console      arquivo .robot finalizado com sucesso!
     Close Browser
