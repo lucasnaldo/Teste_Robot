@@ -56,7 +56,6 @@ Log in
 Menu Superior
     # Clica no Menu superior direito
     Click Element         xpath=//div[contains(@class,'btn-group')]
-    Wait Until Element Is Enabled       xpath=//*[@href="#/account"]
     # Clica no item My Account
     Click Element         xpath=//*[@id="content"]/div[1]/div[2]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/ul[1]/li[1]/a[1]
     Wait Until Page Contains    Create New Key
