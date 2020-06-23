@@ -12,8 +12,8 @@ Variables           clash.py
 *** Variables ***
 ${URL}          https://developer.clashroyale.com/#/login
 ${BROWSER}      chrome
-${email}        lucasnaldo@gmail.com  ## Colocar e-mail cadastrado
-${password}     123lu123  ## Colocar senha cadastrada
+${email}        <<email>>  ## Colocar e-mail cadastrado
+${password}     <<password>>  ## Colocar senha cadastrada
 ${key}          teste
 ${description}     testeDescription
 ${tokenstr}
@@ -56,11 +56,12 @@ Log in
 Menu Superior
     # Clica no Menu superior direito
     Click Element         xpath=//div[contains(@class,'btn-group')]
+    Wait Until Element Is Enabled       xpath=//*[@href="#/account"]
     # Clica no item My Account
     Click Element         xpath=//*[@id="content"]/div[1]/div[2]/div[1]/header[1]/div[1]/div[1]/div[3]/div[1]/div[1]/ul[1]/li[1]/a[1]
     Wait Until Page Contains    Create New Key
     # Clica no botão Create New Key
-    Click Element         xpath=//*[@id="content"]/div[1]/div[2]/div[1]/div[1]/section[2]/div[1]/div[1]/div[2]/p[1]/a[1]/span[2]    
+    Click Element         xpath=//a[contains(@class,'create-key-btn')]
     Wait Until Page Contains    Create a Key
 
 New Key
@@ -75,13 +76,13 @@ New Key
     Click Button    Create Key
     Wait Until Page Contains    teste
     # Clica no Key Name desejado
-    Click Element         xpath=//*[@id="content"]/div[1]/div[2]/div[1]/div[1]/section[2]/div[1]/div[1]/div[2]/ul[1]/li[1]/a[1]/div[1]/h4[1]
+    Click Element         xpath=//*[contains(@class,'api-key')]
     Wait Until Page Contains    Back to My Keys
     # Copia o Token
-    ${token}=   Get Text   xpath=//*[@id="content"]/div[1]/div[2]/div[1]/div[1]/section[1]/div[1]/div[1]/div[2]/form[1]/div[1]/div[1]/samp[1]
+    ${token}=   Get Text   xpath=//*[contains(@class,'form-control input-lg')]
     ${tokenstr}=    Convert To String   ${token}
     Set Global Variable    ${tokenstr}
-    Executa funçao da API do clash royale
+    # Executa funçao da API do clash royale
     ${xxx}=  evaluate  clash.get_clan()  modules=clash
     Log To Console      arquivo .robot finalizado com sucesso!
     Close Browser
